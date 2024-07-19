@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="@null"
@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:text="取/放货物结果"
                 android:textColor="@color/white"
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                     android:gravity="center"
                     android:text="货物名称"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -68,7 +68,7 @@
                     android:gravity="center"
                     android:text="货物数量"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -76,7 +76,7 @@
                     android:gravity="center"
                     android:text="取/放"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
 

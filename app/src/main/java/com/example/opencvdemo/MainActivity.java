@@ -45,7 +45,6 @@ import com.example.opencvdemo.utils.MoveUtils;
 import com.example.opencvdemo.view.RecycleViewAdapter;
 
 import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.FrameRecorder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.opencv.android.BaseLoaderCallback;
@@ -147,13 +146,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
 
     private int cameraIndex = 0;
 
-    private MoveUtils moveUtils;
-
-    private FFmpegFrameRecorder fmpegFrameRecorder;
-    private boolean isRecordFlag = true;
-    private int FFmRecordFlag = 0;
-
-    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,9 +192,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
                 throw new RuntimeException(e);
             }
         }
-//        File file1 = new File(videoPathDir + "123" + ".avi");
-//        File file2 = new File(videoPathDir + "123" + ".mp4");
-//        AviToMp4Utils.convert(file1, file2);
     }
 
     private void initView() {
@@ -225,7 +214,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
             }
         });
         cameraView = findViewById(R.id.fd_activity_surface_view);
-//        cameraView.setAlpha(0);
         cameraView.setCvCameraViewListener(this);
         recyclerView = findViewById(R.id.recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -305,7 +293,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
                         rotateCode = number;
                     } else if (flag == 2) {
                         cameraIndex = number;
-//                        onDestroy();
                         if (cameraView != null) {
                             cameraView.disableView();
                         }
@@ -437,39 +424,13 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
         kernel.release();
     }
 
-    /*
-        实时接收摄像头数据
-        然后调用classifier人脸检测
-        对视频每一帧进行处理
-     */
+//    实时接收摄像头数据
+//    然后调用classifier人脸检测
+//    对视频每一帧进行处理
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-//        if (FFmRecordFlag == 0) {
-//            try {
-//                fmpegFrameRecorder = moveUtils.getRecorderInstance(recordFileName, mRgba);
-//                moveUtils.init(fmpegFrameRecorder);
-//                isRecordFlag = true;
-//                fmpegFrameRecorder.start();
-//            } catch (FrameRecorder.Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        if (FFmRecordFlag >= 400) {
-//            try {
-//                if (fmpegFrameRecorder != null) {
-//                    fmpegFrameRecorder.stop();
-//                    fmpegFrameRecorder.release();
-//                    isRecordFlag = false;
-//                    Log.e("fmpegFrameRecorder", "fmpegFrameRecorder.stop(): ");
-//                }
-//            } catch (FFmpegFrameRecorder.Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        FFmRecordFlag += 1;
         //flipCode: 0 图像向下翻转; >0 图像向右翻转; <0 图像同时向下和向右翻转
-//        Core.flip(mRgba, mRgba, flipCode);
         if (flipCode != 2) {
             Log.e("flag", "flipCode: ");
             Core.flip(mRgba, mRgba, flipCode);
@@ -479,25 +440,12 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
             Log.e("flag", "rotateCode: ");
             Core.rotate(mRgba, mRgba, rotateCode);
         }
-        Size size = new Size(cameraView.getWidth(), cameraView.getHeight());
-//        Imgproc.resize(mRgba, mRgba, size, Imgproc.INTER_LINEAR);
-        if (recordFlag) {
-//            videoWriter.write(mRgba);
-            Log.e(TAG, "onCameraFrame: " + mRgba);
-        }
-//        int orientation = getResources().getConfiguration().orientation;
-//        Log.e("orientation", "orientation: " + orientation);
-//        Log.e("orientation isMoving", isMoving + "");
-//        Imgproc.rectangle(mRgba, new Point(0, 0), new Point(mRgba.width(), mRgba.height() * 0.3), new Scalar(0, 255, 0), 2);
-//        Imgproc.polylines(mRgba, Arrays.asList(new MatOfPoint(new Point(0,0))), true, new Scalar(0.255, 0), 2);
         if (fps == fpsLimit) {
-//            mRgba = detectMove(mTemp, mRgba);
             if (flag == 1) {
                 flag = 3;
                 objectTrackDetect(mRgba);
             } else if (flag == 0) {
                 if (mTemp.width() != 0) {
-//                    mRgba = detectMove(mTemp, mRgba);
                     mRgba = BackgroundSubtractorMOG2(mRgba);
                     if (isMoving) {
                         flag = 3;
@@ -513,24 +461,18 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
             Location location = locations.get(i);
             Imgproc.rectangle(mRgba, new Point(mRgba.width() * location.getX1(), mRgba.height() * location.getY1()), new Point(mRgba.width() * location.getX2(), mRgba.height() * location.getY2()), new Scalar(0, 255, 0), 2);
         }
-//        bitmap = Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888);
-//        if (fmpegFrameRecorder != null && isRecordFlag) {
-//            moveUtils.record(fmpegFrameRecorder,bitmap);
-//        }
         return mRgba;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        cameraView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_ANY);
         cameraView.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_ANY, cameraIndex);
         if (!OpenCVLoader.initDebug()) {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, baseLoaderCallback);
         } else {
             baseLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
-        moveUtils = new MoveUtils();
     }
 
     @Override
@@ -689,7 +631,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
             flag = 0;
             recordFlag = false;
         } else if (id == R.id.confirm) {
-
         }
         if (array.size() > 0) {
             array.clear();
@@ -740,9 +681,7 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
                     flag = 0;
                     return;
                 }
-                // 录像
-//                videoPath = ROOT_PATH + "OpenCv" + "/videos/" + System.currentTimeMillis() + ".avi";
-//                videoWriter = new VideoWriter(videoPath, VideoWriter.fourcc('M', 'J', 'P', 'G'), 20, new Size(800, 600));
+                // TODO 录像
                 if (conArray.size() > 0) {
                     conArray.clear();
                 }
@@ -765,7 +704,6 @@ public class MainActivity extends CameraActivity implements CameraBridgeViewBase
                             (data, Detect.class);
                     Double confidence = detect.getConfidence();
                     if (confidence >= 0.50) {
-//                        conArray.add(detect);
                         locations.add(detect.getBox());
                         collectConArray(detect);
                         flag = 1;
