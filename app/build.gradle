@@ -1,0 +1,85 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "com.example.opencvdemo"
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+//        externalNativeBuild {
+//            cmake {
+//                arguments "-DOpenCV_DIR=" + project(':opencv').projectDir + "/native/jni",
+//                        "-DANDROID_TOOLCHAIN=clang",
+//                        "-DANDROID_STL=c++_shared"
+//                targets "detection_based_tracker"
+//            }
+//        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/NOTICE.md'
+    }
+
+//    externalNativeBuild {
+//        cmake {
+//            path 'jni/CMakeLists.txt'
+//        }
+//    }
+}
+ext {
+    versions = [
+            'javacv': '1.4.2',
+            'ffmpeg': '4.0.1'
+
+    ]
+}
+dependencies {
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    implementation 'ws.schild:jave-core:3.5.0'
+    implementation 'ws.schild:jave-all-deps:3.5.0'
+//    implementation 'com.google.android.material:material:1.2.0-alpha03'
+//    implementation 'org.bytedeco:javacpp-presets:opencv:4.5.1-1.5.5'
+    implementation(group: 'org.bytedeco', name: 'javacv-platform', version: versions.javacv) {
+        exclude group: 'org.bytedeco.javacpp-presets'
+    }
+    implementation group: 'org.bytedeco.javacpp-presets', name: 'ffmpeg', version: "${versions.ffmpeg}-${versions.javacv}"
+    implementation group: 'org.bytedeco.javacpp-presets', name: 'ffmpeg', version: "${versions.ffmpeg}-${versions.javacv}", classifier: 'android-arm'
+    implementation group: 'org.bytedeco.javacpp-presets', name: 'ffmpeg', version: "${versions.ffmpeg}-${versions.javacv}", classifier: 'android-arm64'
+    implementation project(path: ':opencv')
+}

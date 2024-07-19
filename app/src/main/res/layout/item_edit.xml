@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="320dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:ignore="MissingDefaultResource"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/nameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:inputType="text"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/dp_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.example.opencvdemo.view.CounterView
+            android:id="@+id/numberEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+</LinearLayout>
